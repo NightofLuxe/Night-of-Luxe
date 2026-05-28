@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Night of Luxe | Catálogo Interactivo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        :root {
+            --bg-dark: #0d0d0d;
+            --card-bg: #161616;
+            --gold-premium: #dfba6b;
+            --rose-luxe: #e5b0b0;
+            --text-light: #f5f5f5;
+            --text-muted: #9e9e9e;
+            --border-gold: rgba(223, 186, 107, 0.15);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        header {
+            background-color: rgba(13, 13, 13, 0.95);
+            border-bottom: 1px solid var(--border-gold);
+            padding: 20px 6%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .brand-logo-mock {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 1.5px solid var(--gold-premium);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--gold-premium);
+            background: radial-gradient(circle, #222 0%, #0d0d0d 100%);
+            box-shadow: 0 0 12px rgba(223, 186, 107, 0.2);
+        }
+
+        .brand-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 25px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .brand-name span {
+            color: var(--rose-luxe);
+            font-family: 'Cormorant Garamond', serif;
+            text-transform: lowercase;
+            font-style: italic;
+        }
+
+        .cart-status {
+            position: relative;
+            cursor: pointer;
+            background: rgba(223, 186, 107, 0.08);
+            padding: 10px 22px;
+            border-radius: 30px;
+            border: 1px solid var(--border-gold);
+            font-size: 13px;
+            letter-spacing: 1px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .cart-status:hover {
+            background: rgba(223, 186, 107, 0.15);
+            border-color: var(--gold-premium);
+        }
+
+        .cart-count {
+            background-color: var(--rose-luxe);
+            color: var(--bg-dark);
+            font-weight: bold;
+            border-radius: 50%;
+            padding: 2px 9px;
+            font-size: 12px;
+        }
+
+        .hero {
+            padding: 50px 5%;
+            text-align: center;
+            background: radial-gradient(circle at center, #1b1a18 0%, #0d0d0d 100%);
+            border-bottom: 1px solid var(--border-gold);
+        }
+
+        .hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 42px;
+            letter-spacing: 4px;
+            color: var(--gold-premium);
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .hero p {
+            font-size: 12px;
+            letter-spacing: 3px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .hero-divider {
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold-premium), transparent);
+            margin: 15px auto;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .catalog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 35px;
+        }
+
+        .product-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-gold);
+            border-radius: 6px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(223, 186, 107, 0.4);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+        }
+
+        .product-image-container {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            background-color: #1a1a1a;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: rgba(13, 13, 13, 0.85);
+            border: 1px solid var(--rose-luxe);
+            color: var(--rose-luxe);
+            padding: 4px 10px;
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .product-info {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .product-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 21px;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            margin-bottom: 6px;
+        }
+
+        .product-price {
+            font-size: 16px;
+            color: var(--gold-premium);
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .size-container-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .size-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .size-option {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            cursor: pointer;
+            color: var(--text-muted);
+            background: transparent;
+            transition: all 0.2s;
+        }
+
+        .size-option.active {
+            border-color: var(--gold-premium);
+            color: var(--bg-dark);
+            background-color: var(--gold-premium);
+            font-weight: 600;
+        }
+
+        .size-option.disabled {
+            opacity: 0.2;
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+
+        .btn-add {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            border: 1px solid var(--gold-premium);
+            color: var(--gold-premium);
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-add:hover {
+            background-color: var(--gold-premium);
+            color: var(--bg-dark);
+        }
+
+        .order-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100%;
+            background-color: #121212;
+            border-left: 1px solid var(--border-gold);
+            box-shadow: -10px 0 35px rgba(0,0,0,0.8);
+            z-index: 2000;
+            transition: right 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            padding: 30px;
+        }
+
+        .order-sidebar.open {
+            right: 0;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-gold);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 24px;
+            color: var(--gold-premium);
+        }
+
+        .btn-close-sidebar {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 26px;
+            cursor: pointer;
+        }
+
+        .order-items-list {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.03);
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .item-details h4 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 18px;
+            color: var(--text-light);
+        }
+
+        .item-details p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .item-details span {
+            color: var(--gold-premium);
+            font-size: 13px;
+        }
+
+        .btn-remove-item {
+            background: transparent;
+            border: none;
+            color: #e57373;
+            cursor: pointer;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        .order-total-section {
+            border-top: 1px solid var(--border-gold);
+            padding-top: 15px;
+            margin-bottom: 20px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px;
+        }
+
+        .total-price {
+            color: var(--gold-premium);
+            font-weight: 600;
+        }
+
+        .btn-whatsapp-send {
+            width: 100%;
+            padding: 14px;
+            background-color: #25d366;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 2px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            z-index: 1500;
+            display: none;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        footer {
+            border-top: 1px solid var(--border-gold);
+            padding: 35px 20px;
+            text-align: center;
+            margin-top: 60px;
+            background-color: #050505;
+        }
+
+        footer p {
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 500px) {
+            .order-sidebar { width: 100%; right: -100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <header>
+        <div class="brand">
+            <div class="brand-logo-mock">NL</div>
+            <div class="brand-name">Night <span>of</span> Luxe</div>
+        </div>
+        <div class="cart-status" onclick="toggleSidebar()">
+            Mi Pedido <span class="cart-count" id="cartCount">0</span>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>The Loungewear Collection</h1>
+        <div class="hero-divider"></div>
+        <p>Exclusividad & Confort para tus noches</p>
+    </section>
+
+    <main class="main-container">
+        <div class="catalog-grid" id="catalogGrid">
+            
+            <div class="product-card" id="prod_garfield">
+                <div class="product-image-container">
+                    <span class="product-badge">Última unidad</span>
+                    <img src="pijama_garfield.jpeg" alt="Set Garfield Fresh" class="product-image">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Set Garfield Fresh</h3>
+                    <p class="product-price">$ 20.000 COP</p>
+                    
+                    <div class="size-container-label">Tallas Disponibles:</div>
+                    <div class="size-selector">
+                        <button class="size-option disabled" disabled>S</button>
+                        <button class="size-option disabled" disabled>M</button>
+                        <button class="size-option active" onclick="selectSize(this, 'L')">L</button>
+                    </div>
+                    
+                    <button class="btn-add" onclick="addToCart('Set Garfield Fresh', 20000, 'prod_garfield')">Añadir al Pedido</button>
+                </div>
+            </div>
+
+            <div class="product-card" id="prod_minnie">
+                <div class="product-image-container">
+                    <span class="product-badge">Tendencia</span>
+                    <img src="batola_minnie.jpeg" alt="Batola + Panty Minnie Bow" class="product-image">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Batola + Panty Minnie Bow</h3>
+                    <p class="product-price">$ 20.000 COP</p>
+                    
+                    <div class="size-container-label">Tallas Disponibles:</div>
+                    <div class="size-selector">
+                        <button class="size-option active" onclick="selectSize(this, 'S')">S</button>
+                        <button class="size-option" onclick="selectSize(this, 'M')">M</button>
+                        <button class="size-option" onclick="selectSize(this, 'L')">L</button>
+                    </div>
+                    
+                    <button class="btn-add" onclick="addToCart('Batola + Panty Minnie Bow', 20000, 'prod_minnie')">Añadir al Pedido</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <div class="order-sidebar" id="orderSidebar">
+        <div class="sidebar-header">
+            <h3 class="sidebar-title">Tu Pedido</h3>
+            <button class="btn-close-sidebar" onclick="toggleSidebar()">&times;</button>
+        </div>
+        
+        <div class="order-items-list" id="orderItemsList">
+            <p style="color: var(--text-muted); text-align: center; margin-top: 30px;" id="emptyCartMessage">Tu bolsa de lujo está vacía.</p>
+        </div>
+        
+        <div class="order-total-section">
+            <div class="total-row">
+                <span>Total:</span>
+                <span class="total-price" id="totalPrice">$ 0 COP</span>
+            </div>
+        </div>
+        
+        <button class="btn-whatsapp-send" onclick="sendOrderToWhatsApp()">
+            <svg style="width:18px;height:18px;fill:currentColor" viewBox="0 0 24 24"><path d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984a9.96 9.96 0 0 0 1.335 4.963L2 22l5.21-.1.362.214a9.957 9.957 0 0 0 4.44 1.057h.004c5.505 0 9.988-4.48 9.99-9.986A9.974 9.974 0 0 0 12.012 2zm5.707 14.194c-.249.702-1.442 1.333-1.98 1.401-.486.062-1.119.108-3.036-.653-2.45-.974-4.007-3.447-4.13-3.608-.121-.163-1.002-1.319-1.002-2.517 0-1.2.622-1.791.843-2.035.221-.244.482-.305.643-.305.161 0 .322.002.462.009.146.007.342-.056.536.41.2.48.683 1.662.743 1.783.06.121.1.262.02.423-.079.162-.12.263-.241.404-.12.143-.255.32-.364.431-.122.122-.25.254-.108.497.143.242.636 1.042 1.364 1.69.937.834 1.726 1.092 1.968 1.213.242.122.383.102.524-.061.141-.162.604-.702.765-.943.16-.242.321-.202.542-.121.222.081 1.408.665 1.649.786.242.121.402.182.463.284.06.104.06.587-.19 1.29z"/></svg>
+            Enviar Pedido a WhatsApp
+        </button>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Night of Luxe. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        let cart = [];
+        const WHATSAPP_NUMBER = "573144017339";
+
+        function selectSize(button, size) {
+            const selector = button.parentElement;
+            selector.querySelectorAll('.size-option').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+        }
+
+        function toggleSidebar() {
+            document.getElementById('orderSidebar').classList.toggle('open');
+            document.getElementById('sidebarOverlay').classList.toggle('active');
+        }
+
+        function addToCart(name, price, cardId) {
+            const card = document.getElementById(cardId);
+            const activeSizeBtn = card.querySelector('.size-option.active');
+            if(!activeSizeBtn) {
+                alert("Por favor selecciona una talla.");
+                return;
+            }
+            const selectedSize = activeSizeBtn.innerText;
+            
+            const existingItem = cart.find(item => item.name === name && item.size === selectedSize);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ name: name, price: price, size: selectedSize, quantity: 1 });
+            }
+            
+            updateCartUI();
+            toggleSidebar();
+        }
+
+        function removeFromCart(name, size) {
+            cart = cart.filter(item => !(item.name === name && item.size === size));
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const cartCount = document.getElementById('cartCount');
+            const orderItemsList = document.getElementById('orderItemsList');
+            const totalPriceElement = document.getElementById('totalPrice');
+            
+            const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+            cartCount.innerText = totalItems;
+            
+            orderItemsList.innerHTML = '';
+            
+            if (cart.length === 0) {
+                orderItemsList.innerHTML = '<p style="color: var(--text-muted); text-align: center; margin-top: 30px;">Tu bolsa de lujo está vacía.</p>';
+                totalPriceElement.innerText = "$ 0 COP";
+                return;
+            }
+            
+            let totalMoney = 0;
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                totalMoney += itemTotal;
+                
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'order-item';
+                itemDiv.innerHTML = `
+                    <div class="item-details">
+                        <h4>${item.name}</h4>
+                        <p>Talla: <strong>${item.size}</strong> | Cant: ${item.quantity}</p>
+                        <span>$ ${itemTotal.toLocaleString('es-CO')} COP</span>
+                    </div>
+                    <button class="btn-remove-item" onclick="removeFromCart('${item.name}', '${item.size}')">Quitar</button>
+                `;
+                orderItemsList.appendChild(itemDiv);
+            });
+            
+            totalPriceElement.innerText = `$ ${totalMoney.toLocaleString('es-CO')} COP`;
+        }
+
+        function sendOrderToWhatsApp() {
+            if (cart.length === 0) {
+                alert("Tu pedido está vacío.");
+                return;
+            }
+            
+            let message = "✨ *NIGHT OF LUXE - NUEVO PEDIDO* ✨\n\n";
+            message += "Hola, me interesa encargar las siguientes pijamas de tu catálogo:\n\n";
+            
+            let total = 0;
+            cart.forEach((item, index) => {
+                const subtotal = item.price * item.quantity;
+                total += subtotal;
+                message += `*${index + 1}. ${item.name}*\n`;
+                message += `   • Talla: ${item.size}\n`;
+                message += `   • Cantidad: ${item.quantity}\n`;
+                message += `   • Subtotal: $ ${subtotal.toLocaleString('es-CO')} COP\n\n`;
+            });
+            
+            message += `-------------\n`;
+            message += `💰 *TOTAL A PAGAR:* $ ${total.toLocaleString('es-CO')} COP\n\n`;
+            message += "Quedo atenta para coordinar el pago y el envío. ✨";
+            
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
+        }
+    </script>
+</body>
+</html>
